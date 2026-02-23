@@ -6,5 +6,5 @@ def solution(s):
     
     for word, num in words.items():
         s = s.replace(word, num)
-    
+        
     return int(s)
