@@ -1,20 +1,16 @@
 def solution(id_list, report, k):
-    answer = []
     report = set(report)
     
-    report_count = {id: 0 for id in id_list}
-    user_reports = {id: [] for id in id_list}
+    report_hist = {user: [] for user in id_list}
+    mail_count = {user: 0 for user in id_list}
     
     for r in report:
         reporter, reported = r.split()
-        report_count[reported] += 1
-        user_reports[reporter].append(reported)
+        report_hist[reported].append(reporter)
     
-    for id in id_list:
-        mail = 0
-        for reported_user in user_reports[id]:
-            if report_count[reported_user] >= k:
-                mail += 1
-        answer.append(mail)
-        
-    return answer
+    for reported, reporters in report_hist.items():
+        if len(reporters) >= k:
+            for user in reporters:
+                mail_count[user] += 1
+                
+    return [mail_count[user] for user in id_list]
