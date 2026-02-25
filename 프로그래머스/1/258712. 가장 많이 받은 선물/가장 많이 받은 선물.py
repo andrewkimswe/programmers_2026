@@ -1,30 +1,32 @@
 def solution(friends, gifts):
-    n = len(friends)
+    record = {f: {f2: 0 for f2 in friends} for f in friends}
 
-    name_to_idx = {name: i for i, name in enumerate(friends)}
+    gift_score = {f: 0 for f in friends}
     
-    graph = [[0] * n for _ in range(n)]
-    gift_indices = [0] * n
-    
+    next_month = {f: 0 for f in friends}
+
     for g in gifts:
         giver, receiver = g.split()
-        idx1, idx2 = name_to_idx[giver], name_to_idx[receiver]
-        graph[idx1][idx2] += 1
-        gift_indices[idx1] += 1
-        gift_indices[idx2] -= 1
+        record[giver][receiver] += 1
+        gift_score[giver] += 1
+        gift_score[receiver] -= 1
         
-    next_month_gifts = [0] * n
-    
-    for i in range(n):
-        for j in range(i + 1, n):
-            if graph[i][j] > graph[j][i]:
-                next_month_gifts[i] += 1
-            elif graph[i][j] < graph[j][i]:
-                next_month_gifts[j] += 1
+    for i in range(len(friends)):
+        for j in range(i + 1, len(friends)):
+            f1 = friends[i]
+            f2 = friends[j]
+            
+            give_f1 = record[f1][f2]
+            give_f2 = record[f2][f1]
+            
+            if give_f1 > give_f2:
+                next_month[f1] += 1
+            elif give_f2 > give_f1:
+                next_month[f2] += 1
             else:
-                if gift_indices[i] > gift_indices[j]:
-                    next_month_gifts[i] += 1
-                elif gift_indices[i] < gift_indices[j]:
-                    next_month_gifts[j] += 1
-                    
-    return max(next_month_gifts)
+                if gift_score[f1] > gift_score[f2]:
+                    next_month[f1] += 1
+                elif gift_score[f2] > gift_score[f1]:
+                    next_month[f2] += 1
+
+    return max(next_month.values())
