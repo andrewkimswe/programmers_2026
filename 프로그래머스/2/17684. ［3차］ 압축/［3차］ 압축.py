@@ -1,21 +1,21 @@
 def solution(msg):
+    dic = {chr(i + 64): i for i in range(1, 27)}
+    
     answer = []
-    alphabet_dict = {chr(i): i - 64 for i in range(ord('A'), ord('Z') + 1)}
-    start = 0
-            
-    while start < len(msg):
-        end = start + 1
+    start, end = 0, 1
+    next_index = 27
+    
+    while end <= len(msg):
+        w = msg[start:end]
         
-        while end <= len(msg) and msg[start:end] in alphabet_dict:
+        if w in dic:
             end += 1
+        else:
+            answer.append(dic[w[:-1]])
+            dic[w] = next_index
+            next_index += 1
+            start = end - 1
             
-        w = msg[start:end-1]
-        answer.append(alphabet_dict[w])
-        
-        if end <= len(msg):
-            new_word = msg[start:end]
-            alphabet_dict[new_word] = len(alphabet_dict) + 1
-        
-        start += len(w)
+    answer.append(dic[msg[start:]])
     
     return answer
