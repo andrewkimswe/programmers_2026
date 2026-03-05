@@ -1,40 +1,32 @@
 import math
 
-def to_minutes(time_str):
-    h, m = map(int, time_str.split(':'))
-    return h * 60 + m
-
 def solution(fees, records):
     base_time, base_fee, unit_time, unit_fee = fees
-    
-    parking_status = {}
+    parking_log = {}
     total_times = {}
     
-    for r in records:
-        time, car_num, status = r.split()
-        minutes = to_minutes(time)
+    for record in records:
+        time_str, car_num, status = record.split()
+        h, m = map(int, time_str.split(':'))
+        curr_time = h * 60 + m
         
         if status == "IN":
-            parking_status[car_num] = minutes
-            if car_num not in total_times:
-                total_times[car_num] = 0
+            parking_log[car_num] = curr_time
         else:
-            total_times[car_num] += minutes - parking_status[car_num]
-            del parking_status[car_num]
+            duration = curr_time - parking_log.pop(car_num)
+            total_times[car_num] = total_times.get(car_num, 0) + duration
             
-    last_time = to_minutes("23:59")
-    for car_num, in_time in parking_status.items():
-        total_times[car_num] += last_time - in_time
+    for car_num, in_time in parking_log.items():
+        duration = 1439 - in_time
+        total_times[car_num] = total_times.get(car_num, 0) + duration
         
-    sorted_cars = sorted(total_times.items())
-    
     answer = []
-    for car_num, total_time in sorted_cars:
-        fee = base_fee
-        
-        if total_time > base_time:
-            fee += math.ceil((total_time - base_time) / unit_time) * unit_fee
-            
+    for car_num in sorted(total_times.keys()):
+        time = total_times[car_num]
+        if time <= base_time:
+            fee = base_fee
+        else:
+            fee = base_fee + math.ceil((time - base_time) / unit_time) * unit_fee
         answer.append(fee)
-            
+        
     return answer
