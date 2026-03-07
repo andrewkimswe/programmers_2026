@@ -1,28 +1,22 @@
-def change_notes(melody):
-    return (melody.replace('C#', 'c')
-                  .replace('D#', 'd')
-                  .replace('F#', 'f')
-                  .replace('G#', 'g')
-                  .replace('A#', 'a')
-                  .replace('E#', 'e')
-                  .replace('B#', 'b'))
+def change_note(s):
+    return s.replace('C#', 'c').replace('D#', 'd').replace('F#', 'f').replace('G#', 'g').replace('A#', 'a').replace('B#', 'b')
 
 def solution(m, musicinfos):
-    m = change_notes(m)
+    m = change_note(m)
     candidates = []
-    
-    for idx, info in enumerate(musicinfos):
-        start, end, title, sheet = info.split(',')
+
+    for i, info in enumerate(musicinfos):
+        start, end, title, melody = info.split(',')
         
         start_h, start_m = map(int, start.split(':'))
         end_h, end_m = map(int, end.split(':'))
-        duration = (end_h * 60 + end_m) - (start_h * 60 + start_m)
+        play_time = (end_h * 60 + end_m) - (start_h * 60 + start_m)
         
-        sheet = change_notes(sheet)
-        full_melody = (sheet * (duration // len(sheet) + 1))[:duration]
+        melody = change_note(melody)
+        full_melody = (melody * (play_time // len(melody) + 1))[:play_time]
         
         if m in full_melody:
-            candidates.append((duration, idx, title))
+            candidates.append((play_time, i, title))
             
     if not candidates:
         return "(None)"
