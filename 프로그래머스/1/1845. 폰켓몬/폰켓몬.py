@@ -1,4 +1,6 @@
 def solution(nums):
-    return min(len(nums)/2, len(set(nums)))
-
-# 6분
+    pick_limit = len(nums) // 2
+    
+    unique_types = len(set(nums))
+    
+    return min(pick_limit, unique_types)
