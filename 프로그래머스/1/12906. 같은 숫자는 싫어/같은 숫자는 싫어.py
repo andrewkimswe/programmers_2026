@@ -1,6 +1,8 @@
 def solution(arr):
     answer = []
-    for x in arr:
-        if not answer or x != answer[-1]: # len(answer) == 0도 됨.
-            answer.append(x)
+    
+    for num in arr:
+        if not answer or answer[-1] != num:
+            answer.append(num)
+    
     return answer
