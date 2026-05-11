@@ -1,8 +1,6 @@
 def solution(array, commands):
     answer = []
-    for command in commands:
-        i, j, k = command
-        tmp_ary = array[i-1:j]
-        tmp_ary.sort()
-        answer.append(tmp_ary[k-1])
+    for i, j, k in commands:
+        sliced = sorted(array[i-1:j])
+        answer.append(sliced[k-1])
     return answer
