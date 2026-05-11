@@ -1,24 +1,26 @@
 from itertools import permutations
+import math
 
-def is_prime(n):
-    if n < 2:
+def is_prime(num):
+    if num < 2:
         return False
-    for i in range(2, int(n**0.5) + 1):
-        if n % i == 0:
+    for i in range(2, int(math.sqrt(num)) + 1):
+        if num % i == 0:
             return False
     return True
 
 def solution(numbers):
-    all_nums = set()
-    
-    for i in range(1, len(numbers) + 1):
-        perms = permutations(numbers, i)
-        for p in perms:
-            all_nums.add(int("".join(p)))
-            
+    nums = list(numbers)
+    candidates = set()
+
+    for length in range(1, len(nums) + 1):
+        for perm in permutations(nums, length):
+            n = int(''.join(perm))
+            candidates.add(n)
+
     count = 0
-    for num in all_nums:
-        if is_prime(num):
+    for n in candidates:
+        if is_prime(n):
             count += 1
-            
+
     return count
